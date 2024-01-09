@@ -1,6 +1,7 @@
 .container {
   width: 280px;
   color: #314d3e;
+  height: auto;
 }
 
 .title {
@@ -24,6 +25,7 @@
 .bookmarks {
   margin: 5px 5px;
   padding: 3px;
+  height: fit-content;
 }
 
 .bookmark {
