@@ -1,7 +1,7 @@
 let youtubeLeftControls, youtubePlayer;
 let currentVideo = "";
 let currentVideoBookmarks = [];
-let userStatus;
+let userStatus = "online";
 let offLifeTime = 0;
 const gapTime = 180; //3 minus
 const timeout = 10000;
@@ -45,6 +45,7 @@ const watchingOffline = () => {
     let pauseStartTime;
 
     const checkOfflineStatus = () => {
+        console.log("checkOffline is revoked");
         if (!youtubePlayer.paused) return;
 
         const currentTime = new Date().getTime();
@@ -52,7 +53,7 @@ const watchingOffline = () => {
 
         if (pauseDuration > gapTime) {
             userStatus = "offline";
-            chrome.storage.local.set({ userStatus });
+            chrome.storage.sync.set({ userStatus });
         } else {
             setTimeout(checkOfflineStatus, timeout);
         }
@@ -63,7 +64,7 @@ const watchingOffline = () => {
         checkOfflineStatus();
     } else {
         userStatus = "online";
-        chrome.storage.local.set({ userStatus });
+        chrome.storage.sync.set({ userStatus });
     }
 };
 
@@ -72,7 +73,7 @@ const updateStatus = () => {
         watchingOffline();
     } else {
         userStatus = "online";
-        chrome.storage.local.set({ userStatus });
+        chrome.storage.sync.set({ userStatus });
     }
 };
 
@@ -81,7 +82,7 @@ const setupPlayerEventListeners = () => {
 
     youtubePlayer.addEventListener('play', updateStatus);
 
-    chrome.storage.local.set({ userStatus });
+    chrome.storage.sync.set({ userStatus });
 
     if (userPlayer.paused) {
         userPlayer.paused = false;
