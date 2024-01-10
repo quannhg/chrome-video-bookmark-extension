@@ -4,6 +4,7 @@ let currentVideoBookmarks = [];
 let userStatus;
 let offLifeTime = 0;
 const gapTime = 180; //3 minus
+const timeout = 10000;
 
 const getTime = (t) => {
     var date = new Date(0);
@@ -53,7 +54,7 @@ const watchingOffline = () => {
             userStatus = "offline";
             chrome.storage.local.set({ userStatus });
         } else {
-            setTimeout(checkOfflineStatus, 1000);
+            setTimeout(checkOfflineStatus, timeout);
         }
     };
 
@@ -80,9 +81,11 @@ const setupPlayerEventListeners = () => {
 
     youtubePlayer.addEventListener('play', updateStatus);
 
+    chrome.storage.local.set({ userStatus });
+
     if (userPlayer.paused) {
-        userPlayer.pauser = false;
-        userPlayer.pauser = true;
+        userPlayer.paused = false;
+        userPlayer.paused = true;
     }
 };
 
