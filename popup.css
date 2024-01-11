@@ -10,6 +10,17 @@
   padding: 8px;
 }
 
+.userStatus-container {
+  padding: 8px;
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.userStatus-icon {
+  width: 1.5em;
+}
+
 .textbox {
   width: 100%;
   font-size: 12px;

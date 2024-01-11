@@ -76,6 +76,23 @@ const setBookmarkAttributes = (src, eventListener, controlParentElement) => {
     controlParentElement.appendChild(controlElement);
 };
 
+const updateIconStatus = (userStatus) => {
+    if (userStatus) {
+        const statusIcon = document.getElementsByClassName("userStatus-icon")[0];
+        statusIcon.src = userStatus === "online" ? "assets/green-dot.png" : "assets/red-dot.png";
+
+        const statusDesc = document.getElementsByClassName("userStatus")[0];
+        statusDesc.innerHTML = userStatus === "online" ? 'Online' : 'Offline';
+    }
+};
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName === "sync" && changes.userStatus) {
+        const newUserStatus = changes.userStatus.newValue;
+        updateIconStatus(newUserStatus);
+    }
+});
+
 document.addEventListener("DOMContentLoaded", async () => {
     const activeTab = await getActiveTabURL();
 
@@ -106,3 +123,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         container.innerHTML = '<div class="title">This is not a youtube video page. </div>';
     }
 });
+
+document.addEventListener("click", () => {
+    const userStatus = chrome.storage.sync.get("userStatus").userStatus;
+    console.log(userStatus);
+    updateIconStatus(userStatus);
+})

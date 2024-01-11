@@ -3,8 +3,8 @@ let currentVideo = "";
 let currentVideoBookmarks = [];
 let userStatus = "online";
 let offLifeTime = 0;
-const gapTime = 180; //3 minus
-const timeout = 10000;
+const gapTime = 3; //3 minus
+const timeout = 3000;
 
 const getTime = (t) => {
     var date = new Date(0);
@@ -54,6 +54,7 @@ const watchingOffline = () => {
         if (pauseDuration > gapTime) {
             userStatus = "offline";
             chrome.storage.sync.set({ userStatus });
+            console.log(userStatus);
         } else {
             setTimeout(checkOfflineStatus, timeout);
         }
@@ -68,12 +69,17 @@ const watchingOffline = () => {
     }
 };
 
+// const saveStatusToStorage = (statusStr) => {
+//     console.log(statusStr);
+//     chrome.storage.sync.set({ userStatus: statusStr });
+// }
+
 const updateStatus = () => {
     if (youtubePlayer.paused) {
         watchingOffline();
     } else {
         userStatus = "online";
-        chrome.storage.sync.set({ userStatus });
+        chrome.storage.sync.set({ userStatus});
     }
 };
 
@@ -84,9 +90,9 @@ const setupPlayerEventListeners = () => {
 
     chrome.storage.sync.set({ userStatus });
 
-    if (userPlayer.paused) {
-        userPlayer.paused = false;
-        userPlayer.paused = true;
+    if (youtubePlayer.paused) {
+        youtubePlayer.paused = false;
+        youtubePlayer.paused = true;
     }
 };
 
